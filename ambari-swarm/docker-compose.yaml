@@ -4,7 +4,7 @@ services:
     repo:
         image: dstreev/hdp-repo
         ports:
-            - "90:80"
+            - "80"
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${LOCAL_REPO_DIR}:/www"
         networks:
@@ -24,7 +24,7 @@ services:
     mysql:
         image: mysql:5.7
         ports:
-            - "3306:3306"
+            - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 #        volumes:
@@ -46,8 +46,8 @@ services:
         depends_on:
             - mysql
         ports:
-            - "8080:8080"
-            - "20022:22"
+            - "8080"
+            - "22"
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node1:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hadoop:/var/log/hadoop"
@@ -84,7 +84,7 @@ services:
         depends_on:
             - ambari
         ports:
-            - "20023:22"
+            - "22"
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node2:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop:/var/log/hadoop"
@@ -118,8 +118,8 @@ services:
         depends_on:
             - ambari
         ports:
-            - "20030:22"
-            - "8081:8080"
+            - "22"
+            - "8080"
         # volumes:
         #     - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/nifi1:/data"
         #     - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/nifi1:/var/log/nifi"
