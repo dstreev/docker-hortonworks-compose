@@ -1,0 +1,148 @@
+version: '3'
+
+services:
+    repo:
+        image: dstreev/hdp-repo
+        container_name: ${DATA_GROUP}_repo
+        ports:
+            - "127.0.0.1:90:80"
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${LOCAL_REPO_DIR}:/www"
+        networks:
+            core:
+                aliases:
+                    - repo.hdp.local
+        deploy:
+          mode: global
+          resources:
+            limits:
+              cpus: '0.001'
+              memory: 50M
+            reservations:
+              cpus: '0.0001'
+              memory: 20M
+    mysql:
+        image: mysql:5.7
+        container_name: ${DATA_GROUP}_mysql
+        ports:
+            - "127.0.0.1:3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/mysql/datadir:/var/lib/mysql"
+            - "${ROOT_HDP_DATA_MOUNT}/mysql/init_ambari_${AMBARI_VERSION}:/docker-entrypoint-initdb.d"
+        networks:
+            core:
+                aliases:
+                    - db.hdp.local
+        deploy:
+          mode: global
+          resources:
+            limits:
+              cpus: '0.100'
+              memory: 500M
+    ambari:
+        image: dstreev/ambari-server:${AMBARI_VERSION}
+        container_name: ${DATA_GROUP}_node1_${AMBARI_VERSION}
+        depends_on:
+            - mysql
+        ports:
+            - "127.0.0.1:8080:8080"
+            - "127.0.0.1:20022:22"
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node1:/data"
+#            - "${ROOT_HDP_DATA_MOUNT}/hdpdata/${DATA_GROUP}/usr/hdp/node1:/usr/hdp"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ambari.hdp.local
+                    - n1.hdp.local
+      #mem_limit: 4G
+        deploy:
+          mode: global
+          resources:
+            limits:
+              cpus: '0.5'
+              memory: 2G
+            reservations:
+              cpus: '0.5'
+              memory: 1G
+    worker:
+        image: dstreev/ambari-agent:${AMBARI_VERSION}
+        container_name: ${DATA_GROUP}_node2_${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        depends_on:
+            - ambari
+        ports:
+            - "127.0.0.1:20023:22"
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node2:/data"
+#            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/usr/hdp/node2:/usr/hdp"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - n2.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+          resources:
+            limits:
+              cpus: '0.5'
+              memory: 6G
+            reservations:
+              cpus: '0.5'
+              memory: 2G
+    nifi_1:
+        image: dstreev/nifi:${NIFI_VERSION}
+        container_name: ${DATA_GROUP}_nifi1_${NIFI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        depends_on:
+            - ambari
+        ports:
+            - "127.0.0.1:20030:22"
+            - "127.0.0.1:8081:8080"
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/nifi1:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/nifi1:/var/log/nifi"
+#        command: [/usr/bin/supervisord,-n]
+        networks:
+            core:
+                aliases:
+                    - nifi1.hdp.local
+        deploy:
+          mode: global
+          resources:
+            limits:
+              cpus: '0.5'
+              memory: 2G
+            reservations:
+                cpus: '0.5'
+                memory: 500M
+
+networks:
+    core:
+        external: true
