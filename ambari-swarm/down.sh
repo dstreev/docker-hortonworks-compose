@@ -2,4 +2,4 @@
 
 . ./init.sh $@
 
-docker-compose down
+docker stack rm ambari-1
