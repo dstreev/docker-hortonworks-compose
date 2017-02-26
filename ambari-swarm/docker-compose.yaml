@@ -14,13 +14,13 @@ services:
                     - repo.hdp.local
         deploy:
           mode: global
-          resources:
-            limits:
-              cpus: '0.001'
-              memory: 50M
-            reservations:
-              cpus: '0.001'
-              memory: 20M
+#          resources:
+#            limits:
+#              cpus: '0.001'
+#              memory: 50M
+#            reservations:
+#              cpus: '0.001'
+#              memory: 20M
     mysql:
         image: mysql:5.7
         container_name: ${DATA_GROUP}_mysql
@@ -37,10 +37,10 @@ services:
                     - db.hdp.local
         deploy:
           mode: global
-          resources:
-            limits:
-              cpus: '0.100'
-              memory: 500M
+#          resources:
+#            limits:
+#              cpus: '0.100'
+#              memory: 500M
     ambari:
         image: dstreev/ambari-server:${AMBARI_VERSION}
         container_name: ${DATA_GROUP}_node1_${AMBARI_VERSION}
@@ -71,13 +71,13 @@ services:
       #mem_limit: 4G
         deploy:
           mode: global
-          resources:
-            limits:
-              cpus: '0.5'
-              memory: 2G
-            reservations:
-              cpus: '0.5'
-              memory: 1G
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 2G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 1G
     worker:
         image: dstreev/ambari-agent:${AMBARI_VERSION}
         container_name: ${DATA_GROUP}_node2_${AMBARI_VERSION}
@@ -108,13 +108,13 @@ services:
         deploy:
           mode: replicated
           replicas: 1
-          resources:
-            limits:
-              cpus: '0.5'
-              memory: 6G
-            reservations:
-              cpus: '0.5'
-              memory: 2G
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
     nifi_1:
         image: dstreev/nifi:${NIFI_VERSION}
         container_name: ${DATA_GROUP}_nifi1_${NIFI_VERSION}
@@ -135,13 +135,13 @@ services:
                     - nifi1.hdp.local
         deploy:
           mode: global
-          resources:
-            limits:
-              cpus: '0.5'
-              memory: 2G
-            reservations:
-                cpus: '0.5'
-                memory: 500M
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 2G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 500M
 
 networks:
     core:
