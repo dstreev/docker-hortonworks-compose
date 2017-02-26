@@ -13,7 +13,8 @@ services:
                 aliases:
                     - repo.hdp.local
         deploy:
-          mode: global
+          mode: replicated
+          replicas: 1
 #          resources:
 #            limits:
 #              cpus: '0.001'
@@ -36,7 +37,8 @@ services:
                 aliases:
                     - db.hdp.local
         deploy:
-          mode: global
+          mode: replicated
+          replicas: 1
 #          resources:
 #            limits:
 #              cpus: '0.100'
@@ -69,7 +71,8 @@ services:
                     - n1.hdp.local
       #mem_limit: 4G
         deploy:
-          mode: global
+          mode: replicated
+          replicas: 1
 #          resources:
 #            limits:
 #              cpus: '0.5'
@@ -130,7 +133,8 @@ services:
                 aliases:
                     - nifi1.hdp.local
         deploy:
-          mode: global
+          mode: replicated
+          replicas: 1
 #          resources:
 #            limits:
 #              cpus: '0.5'
