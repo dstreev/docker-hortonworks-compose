@@ -3,9 +3,8 @@ version: '3'
 services:
     repo:
         image: dstreev/hdp-repo
-        container_name: ${DATA_GROUP}_repo
         ports:
-            - "127.0.0.1:90:80"
+            - "90:80"
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${LOCAL_REPO_DIR}:/www"
         networks:
@@ -24,9 +23,8 @@ services:
 #              memory: 20M
     mysql:
         image: mysql:5.7
-        container_name: ${DATA_GROUP}_mysql
         ports:
-            - "127.0.0.1:3306:3306"
+            - "3306:3306"
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 #        volumes:
@@ -45,12 +43,11 @@ services:
 #              memory: 500M
     ambari:
         image: dstreev/ambari-server:${AMBARI_VERSION}
-        container_name: ${DATA_GROUP}_node1_${AMBARI_VERSION}
         depends_on:
             - mysql
         ports:
-            - "127.0.0.1:8080:8080"
-            - "127.0.0.1:20022:22"
+            - "8080:8080"
+            - "20022:22"
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node1:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hadoop:/var/log/hadoop"
@@ -82,13 +79,12 @@ services:
 #              memory: 1G
     worker:
         image: dstreev/ambari-agent:${AMBARI_VERSION}
-        container_name: ${DATA_GROUP}_node2_${AMBARI_VERSION}
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         depends_on:
             - ambari
         ports:
-            - "127.0.0.1:20023:22"
+            - "20023:22"
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node2:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop:/var/log/hadoop"
@@ -117,14 +113,13 @@ services:
 #              memory: 2G
     nifi_1:
         image: dstreev/nifi:${NIFI_VERSION}
-        container_name: ${DATA_GROUP}_nifi1_${NIFI_VERSION}
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         depends_on:
             - ambari
         ports:
-            - "127.0.0.1:20030:22"
-            - "127.0.0.1:8081:8080"
+            - "20030:22"
+            - "8081:8080"
         # volumes:
         #     - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/nifi1:/data"
         #     - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/nifi1:/var/log/nifi"
