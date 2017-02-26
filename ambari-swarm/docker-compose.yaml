@@ -86,7 +86,7 @@ services:
             - ambari
         ports:
             - "127.0.0.1:20023:22"
-        volumes:
+#        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node2:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop:/var/log/hadoop"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop-yarn:/var/log/hadoop-yarn"
