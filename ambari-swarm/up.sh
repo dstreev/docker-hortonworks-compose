@@ -6,6 +6,8 @@
 docker network create --driver=overlay --subnet 10.0.10.0/24 --attachable core
 
 # Deploy the stack
-docker stack deploy ambari-1 --compose-file=./docker-compose.yaml
+docker stack deploy ambari-${AMBARI_INSTANCE} --compose-file=./docker-compose.yaml
 
-#docker service create --publish 8080:8080 --network=core --name nifi dstreev/nifi:latest
+#docker service update --publish-add 8080 ambari-1_nifi_1
+
+#docker service update --publish-add 80 ambari-1_repo

@@ -1,50 +1,10 @@
 version: '3'
 
 services:
-    repo:
-        image: dstreev/hdp-repo
-        ports:
-            - "80"
-#        volumes:
-#            - "${ROOT_HDP_DATA_MOUNT}/${LOCAL_REPO_DIR}:/www"
-        networks:
-            core:
-                aliases:
-                    - repo.hdp.local
-        deploy:
-          mode: replicated
-          replicas: 1
-#          resources:
-#            limits:
-#              cpus: '0.001'
-#              memory: 50M
-#            reservations:
-#              cpus: '0.001'
-#              memory: 20M
-    mysql:
-        image: mysql:5.7
-        ports:
-            - "3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#        volumes:
-#            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/mysql/datadir:/var/lib/mysql"
-#            - "${ROOT_HDP_DATA_MOUNT}/mysql/init_ambari_${AMBARI_VERSION}:/docker-entrypoint-initdb.d"
-        networks:
-            core:
-                aliases:
-                    - db.hdp.local
-        deploy:
-          mode: replicated
-          replicas: 1
-#          resources:
-#            limits:
-#              cpus: '0.100'
-#              memory: 500M
     ambari:
         image: dstreev/ambari-server:${AMBARI_VERSION}
-        depends_on:
-            - mysql
+        environment:
+          AMBARI_INSTANCE: '${AMBARI_INSTANCE}'
         ports:
             - "8080"
             - "22"
@@ -64,8 +24,7 @@ services:
         networks:
             core:
                 aliases:
-                    - ambari.hdp.local
-                    - n1.hdp.local
+                    - ambari_${AMBARI_INSTANCE}.hdp.local
       #mem_limit: 4G
         deploy:
           mode: replicated
@@ -81,6 +40,8 @@ services:
         image: dstreev/ambari-agent:${AMBARI_VERSION}
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: '${AMBARI_INSTANCE}'
         depends_on:
             - ambari
         ports:
@@ -99,8 +60,6 @@ services:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/kafka:/var/log/kafka"
         networks:
             core:
-                aliases:
-                    - n2.hdp.local
         deploy:
           mode: replicated
           replicas: 1
@@ -115,6 +74,8 @@ services:
         image: dstreev/nifi:${NIFI_VERSION}
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: '${AMBARI_INSTANCE}'
         depends_on:
             - ambari
         ports:
@@ -126,7 +87,7 @@ services:
         networks:
             core:
                 aliases:
-                    - nifi1.hdp.local
+                    - nifi_${AMBARI_INSTANCE}.hdp.local
         deploy:
           mode: replicated
           replicas: 1

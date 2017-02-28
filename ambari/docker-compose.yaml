@@ -21,7 +21,7 @@ services:
 #                    - ldap.hdp.local
     #kdc:
         # https://github.com/jake-low/kdc.docker
-        #image: jakelow/kdc        
+        #image: jakelow/kdc
     repo:
         image: dstreev/hdp-repo
         container_name: ${DATA_GROUP}_repo
@@ -64,6 +64,8 @@ services:
     ambari:
         image: dstreev/ambari-server:${AMBARI_VERSION}
         container_name: ${DATA_GROUP}_node1_${AMBARI_VERSION}
+        environment:
+          AMBARI_INSTANCE: '01'
         depends_on:
             - mysql
         ports:
@@ -99,10 +101,12 @@ services:
     node_2:
         image: dstreev/ambari-agent:${AMBARI_VERSION}
         container_name: ${DATA_GROUP}_node2_${AMBARI_VERSION}
-        # This dependency is not for the Ambari Server application, but for the 
+        # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         depends_on:
             - ambari
+        environment:
+          AMBARI_INSTANCE: '01'
         ports:
             - "127.0.0.1:20023:22"
         volumes:
@@ -134,10 +138,12 @@ services:
     node_3:
         image: dstreev/ambari-agent:${AMBARI_VERSION}
         container_name: ${DATA_GROUP}_node3_${AMBARI_VERSION}
-        # This dependency is not for the Ambari Server application, but for the 
+        # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         depends_on:
             - ambari
+        environment:
+          AMBARI_INSTANCE: '01'
         ports:
             - "127.0.0.1:20024:22"
         volumes:
@@ -170,7 +176,7 @@ services:
     #    node_4:
 #        image: dstreev/ambari-agent:${AMBARI_VERSION}
 #        container_name: ${DATA_GROUP}_node4_${AMBARI_VERSION}
-#        # This dependency is not for the Ambari Server application, but for the 
+#        # This dependency is not for the Ambari Server application, but for the
 #        # availability to resolve the hostname for ambari-agent start
 #        depends_on:
 #            - ambari
@@ -205,10 +211,12 @@ services:
     nifi_1:
         image: dstreev/nifi:${NIFI_VERSION}
         container_name: ${DATA_GROUP}_nifi1_${NIFI_VERSION}
-        # This dependency is not for the Ambari Server application, but for the 
+        # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         depends_on:
             - ambari
+        environment:
+          AMBARI_INSTANCE: '01'
         ports:
             - "127.0.0.1:20030:22"
             - "127.0.0.1:8081:8080"
@@ -232,4 +240,3 @@ services:
 networks:
     core:
         driver: bridge
-
