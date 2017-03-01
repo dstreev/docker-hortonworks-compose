@@ -3,9 +3,6 @@ version: '3'
 services:
     repo:
         image: dstreev/hdp-repo
-        placement:
-          constraints:
-            - constraint == repo
         ports:
             - "80"
         volumes:
@@ -14,6 +11,12 @@ services:
             core:
                 aliases:
                     - repo.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+              - constraint == repo
 #        resources:
 #            limits:
 #                cpus: '0.001'
@@ -24,9 +27,6 @@ services:
     mysql:
         # https://hub.docker.com/_/mysql/
         image: mysql:5.7
-        placement:
-          constraints:
-            - constraint == mysql
         ports:
             - "3306"
         environment:
@@ -37,6 +37,12 @@ services:
             core:
                 aliases:
                     - db.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+              - constraint == mysql
 #        resources:
 #            limits:
 #                cpus: '0.100'
