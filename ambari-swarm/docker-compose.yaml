@@ -8,6 +8,9 @@ services:
         ports:
             - "8080"
             - "22"
+        links:
+          - hdp-mysql:db.hdp.local
+          - hdp-repo:repo.hdp.local
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node1:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node1/hadoop:/var/log/hadoop"
@@ -46,6 +49,9 @@ services:
             - ambari
         ports:
             - "22"
+        links:
+          - hdp-mysql:db.hdp.local
+          - hdp-repo:repo.hdp.local
 #        volumes:
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/node2:/data"
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/node2/hadoop:/var/log/hadoop"
@@ -81,6 +87,9 @@ services:
         ports:
             - "22"
             - "8080"
+        links:
+          - hdp-mysql:db.hdp.local
+          - hdp-repo:repo.hdp.local
         # volumes:
         #     - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/data/nifi1:/data"
         #     - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/log/nifi1:/var/log/nifi"
