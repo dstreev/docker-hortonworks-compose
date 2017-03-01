@@ -4,7 +4,7 @@ services:
     ambari:
         image: dstreev/ambari-server:${AMBARI_VERSION}
         environment:
-          AMBARI_INSTANCE:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
         ports:
             - "8080"
             - "22"
@@ -41,7 +41,7 @@ services:
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         environment:
-          AMBARI_INSTANCE:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
         depends_on:
             - ambari
         ports:
@@ -75,7 +75,7 @@ services:
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         environment:
-          AMBARI_INSTANCE:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
         depends_on:
             - ambari
         ports:
