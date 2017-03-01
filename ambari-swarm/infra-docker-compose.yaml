@@ -14,7 +14,6 @@ services:
             core:
                 aliases:
                     - repo.hdp.local
-        mem_limit: 100M
 #        resources:
 #            limits:
 #                cpus: '0.001'
@@ -38,7 +37,6 @@ services:
             core:
                 aliases:
                     - db.hdp.local
-        mem_limit: 500M
 #        resources:
 #            limits:
 #                cpus: '0.100'
