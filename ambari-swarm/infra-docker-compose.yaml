@@ -16,7 +16,7 @@ services:
           replicas: 1
           placement:
             constraints:
-              - constraint == repo
+              - node.labels.constraint == repo
 #        resources:
 #            limits:
 #                cpus: '0.001'
@@ -42,7 +42,7 @@ services:
           replicas: 1
           placement:
             constraints:
-              - constraint == mysql
+              - node.labels.constraint == mysql
 #        resources:
 #            limits:
 #                cpus: '0.100'
