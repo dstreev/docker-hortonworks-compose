@@ -52,3 +52,5 @@ For Centos7
 #            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/mysql/datadir:/var/lib/mysql"
 #            - "${ROOT_HDP_DATA_MOUNT}/mysql/init_ambari_${AMBARI_VERSION}:/docker-entrypoint-initdb.d"
 `docker service create --hostname db.hdp.local --network core --name hdp-mysql --mount source=/data/mysql/data,target=/var/lib/mysql,type=bind --mode replicated --replicas 1 --constraint 'node.labels.constraint == mysql' --env MYSQL_ROOT_PASSWORD=hortonworks --publish 3306 mysql:5.7`
+
+## 
