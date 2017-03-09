@@ -2,7 +2,7 @@ version: '3'
 
 services:
     ambari:
-        image: dstreev/ambari-server:${AMBARI_VERSION}
+        image: dstreev/${OS_VERSION}_ambari-server:${AMBARI_VERSION}
         environment:
           AMBARI_INSTANCE: ${AMBARI_INSTANCE}
         ports:
@@ -40,7 +40,7 @@ services:
 #              cpus: '0.5'
 #              memory: 1G
     worker:
-        image: dstreev/ambari-agent:${AMBARI_VERSION}
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         environment:
@@ -77,7 +77,7 @@ services:
 #              cpus: '0.5'
 #              memory: 2G
     nifi_1:
-        image: dstreev/nifi:${NIFI_VERSION}
+        image: dstreev/${OS_VERSION}_nifi:${NIFI_VERSION}
         # This dependency is not for the Ambari Server application, but for the
         # availability to resolve the hostname for ambari-agent start
         environment:
