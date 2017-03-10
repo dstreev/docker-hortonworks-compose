@@ -2,4 +2,4 @@
 
 . ./init.sh $@
 
-docker-compose down
+docker-compose -p ${DATA_GROUP} down

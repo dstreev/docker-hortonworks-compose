@@ -2,4 +2,4 @@
 
 . ./init.sh $@
 
-docker-compose up -d
+docker-compose -p ${DATA_GROUP} up -d 

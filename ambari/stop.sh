@@ -2,4 +2,4 @@
 
 . ./init.sh $@
 
-docker-compose stop
+docker-compose -p ${DATA_GROUP} stop
