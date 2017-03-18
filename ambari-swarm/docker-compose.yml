@@ -1,0 +1,346 @@
+version: '3'
+
+services:
+    ambari:
+        image: dstreev/${OS_VERSION}_ambari-server:${AMBARI_VERSION}
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 01
+        ports:
+            - "8080"
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_srv.hdp.local
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_01.hdp.local
+      #mem_limit: 4G
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 2G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 1G
+    worker_1:
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 02
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_02.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
+    worker_2:
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 03
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_03.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
+    worker_3:
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 04
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_04.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
+    worker_4:
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 05
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_05.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
+    worker_5:
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 06
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_06.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
+    worker_6:
+        image: dstreev/${OS_VERSION}_ambari-agent:${AMBARI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 07
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+        volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_07.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 6G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 2G
+
+    nifi_1:
+        image: dstreev/${OS_VERSION}_nifi:${NIFI_VERSION}
+        # This dependency is not for the Ambari Server application, but for the
+        # availability to resolve the hostname for ambari-agent start
+        environment:
+          AMBARI_INSTANCE: ${AMBARI_INSTANCE}
+          CLUSTER_PREFIX: ${CLUSTER_PREFIX}
+          AGENT: 08
+        depends_on:
+            - ambari
+        ports:
+            - "22"
+            - "8080"
+        links:
+            - hdp-mysql:db.hdp.local
+            - hdp-repo:repo.hdp.local
+         volumes:
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08:/data"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/nifi:/var/log/nifi"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/hadoop:/var/log/hadoop"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/hadoop-yarn:/var/log/hadoop-yarn"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/hadoop-mapreduce:/var/log/hadoop-mapreduce"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/hive:/var/log/hive"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/hbase:/var/log/hbase"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/oozie:/var/log/oozie"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/falcon:/var/log/falcon"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/atlas:/var/log/atlas"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/zookeeper:/var/log/zookeeper"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/ambari-infra-solr:/var/log/ambari-infra-solr"
+            - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/kafka:/var/log/kafka"
+        networks:
+            core:
+                aliases:
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_nifi_01.hdp.local
+                    - ${CLUSTER_PREFIX}${AMBARI_INSTANCE}_agent_08.hdp.local
+        deploy:
+          mode: replicated
+          replicas: 1
+#          resources:
+#            limits:
+#              cpus: '0.5'
+#              memory: 2G
+#            reservations:
+#              cpus: '0.5'
+#              memory: 500M
+
+networks:
+    core:
+        external: true

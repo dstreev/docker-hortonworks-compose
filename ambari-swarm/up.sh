@@ -3,10 +3,10 @@
 . ./init.sh $@
 
 # Create the network
-docker network create --driver=overlay --subnet 10.0.10.0/24 --attachable core
+docker ${DOCKER_OPTS} network create --driver=overlay --subnet 10.0.10.0/24 --attachable core
 
 # Deploy the stack
-docker stack deploy ambari_${AMBARI_INSTANCE} --compose-file=./docker-compose.yaml
+docker ${DOCKER_OPTS} stack deploy ambari_${AMBARI_INSTANCE} --compose-file=./docker-compose.yml
 
 #docker service update --publish-add 8080 ambari-1_nifi_1
 
