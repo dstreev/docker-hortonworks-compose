@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export DOCKER+OPTS="-H d7:2375"
+export DOCKER_OPTS="-H d7:2375"
 
 export CLUSTER_PREFIX=${1:-DK}
 export AMBARI_INSTANCE=${2:-01}

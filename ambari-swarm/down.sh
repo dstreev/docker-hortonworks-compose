@@ -2,4 +2,4 @@
 
 . ./init.sh $@
 
-docker stack rm ambari-1
+docker ${DOCKER_OPTS} stack rm ambari_${AMBARI_INSTANCE}

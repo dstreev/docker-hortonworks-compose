@@ -11,8 +11,8 @@ services:
             - "8080"
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/01/log/hadoop:/var/log/hadoop"
@@ -55,8 +55,8 @@ services:
         ports:
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/02/log/hadoop:/var/log/hadoop"
@@ -97,8 +97,8 @@ services:
         ports:
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/03/log/hadoop:/var/log/hadoop"
@@ -139,8 +139,8 @@ services:
         ports:
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/04/log/hadoop:/var/log/hadoop"
@@ -181,8 +181,8 @@ services:
         ports:
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/05/log/hadoop:/var/log/hadoop"
@@ -223,8 +223,8 @@ services:
         ports:
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/06/log/hadoop:/var/log/hadoop"
@@ -265,8 +265,8 @@ services:
         ports:
             - "22"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
         volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/07/log/hadoop:/var/log/hadoop"
@@ -309,9 +309,9 @@ services:
             - "22"
             - "8080"
         links:
-            - hdp-mysql:db.hdp.local
-            - hdp-repo:repo.hdp.local
-         volumes:
+            - mysql.infra-hdp:db.hdp.local
+            - repo.infra-hdp:repo.hdp.local
+        volumes:
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08:/data"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/nifi:/var/log/nifi"
             - "${ROOT_HDP_DATA_MOUNT}/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/08/log/hadoop:/var/log/hadoop"

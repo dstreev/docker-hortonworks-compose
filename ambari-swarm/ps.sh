@@ -2,4 +2,4 @@
 
 . ./init.sh $@
 
-docker-compose ps
+docker-compose ${DOCKER_OPTS} ps
