@@ -13,4 +13,10 @@ GRANT ALL PRIVILEGES ON *.* TO 'ranger';
 CREATE USER 'ranger_kms' IDENTIFIED BY 'hortonworks';
 GRANT ALL PRIVILEGES ON *.* TO 'ranger_kms';
 
+CREATE USER 'druid' IDENTIFIED BY 'hortonworks';
+GRANT ALL PRIVILEGES ON *.* TO 'druid';
+
+CREATE USER 'superset' IDENTIFIED BY 'hortonworks';
+GRANT ALL PRIVILEGES ON *.* TO 'superset';
+
 FLUSH PRIVILEGES;
