@@ -1,13 +1,21 @@
-# docker-hdp
-HDP Cluster Deployment via Docker
+# hdp-local-cluster
+HDP Cluster Deployment via Docker on Localhost
+
+WIP (Not currently working)
+
+# Requirements
+
+- Local Repo Directory with need HDP distributions
+- Depends on Docker Images:
+-   dstreev/centos7_ambari
+-   dstreev/hdp-repo
 
 
 # Steps
 
-1. Build Centos7:sshd
-2. Build HDP Base
-3. Set environment variable for DATA_GROUP and LAUNCH_DATE
-```
+1. Run `./up.sh [options]` to initial and start cluster
+2. 
+3. 
 export DATA_GROUP=dk_01
 export LAUNCH_DATE=\`date +%Y-%m-%d_%H_%M\`
 

@@ -34,5 +34,5 @@ echo "Ambari Host"
 docker -H d6:2375 ps
 # Nifi Host
 echo "Nifi Host"
-docker -H d3:2375 ps
+docker -H d2:2375 ps
 

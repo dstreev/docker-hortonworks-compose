@@ -2,18 +2,6 @@
 
 . ./init.sh $@
 
-# Create the network
-docker ${DOCKER_OPTS} network create --driver=overlay --subnet 10.0.10.0/24 --attachable core
-
-echo "Clean up: "
-#pdsh -g dk rm -rf /var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data
-pdsh -g dk mkdir -p /var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data
-
-
-
-# Deploy the stack
-#docker ${DOCKER_OPTS} stack deploy ambari_${AMBARI_INSTANCE} --compose-file=./docker-compose.yml
-
 # Deploy on Swarm, but as individual containers
 # Ambari Server
 export AGENT=1

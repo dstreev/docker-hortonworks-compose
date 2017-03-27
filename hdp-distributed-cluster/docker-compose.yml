@@ -1,3 +1,5 @@
+# Does NOT currently work!!!  Use up.sh instead to deploy across multiple hosts in a Docker swarm cluster.
+
 version: '3'
 
 services:
