@@ -197,7 +197,7 @@ Base on the `AMBARI_INSTANCE` environment variable used, databases for each of t
 Assumes `AMBARI_INSTANCE=01`
 
 | Database | User |
-|---|
+|---| --- |
 | ambari_01 | ambari |
 | hive_01 | hive |
 | oozie_01 | oozie |
