@@ -64,72 +64,154 @@ With my hardware, I'm able to setup a 7 node cluster at a time.  I follow a 3 Ma
 
 
 # Requirements and PreRequisites
-There are several pre-configured hostnames in this configuration that are required to line all services up. We'll used Docker Swarm for it's shared network characteristics.  But we will deploy components individually to ensure persisted states across restarts.
+There are several pre-configured hostnames in this configuration that are required to line up all services. We'll used Docker Swarm for it's shared network characteristics.  But we will deploy components individually to ensure persisted states across restarts.
 
 - A Docker Swarm
     - A 7 Node cluster for this configuration
     - A 'core' network that all hosts attach to. This network is created in [`./up.sh`](./up.sh) and [`./infra-up.sh`](./infra-up.sh)
-- Using the [Infra Structure Compose File](./infra-docker-compose.yml) deploy:
+- Using the [Infra Script](./infra-up.sh) to deploy:
     - MySql Instance (db.hdp.local)
     - HTTP Instance for the Repo (repo.hdp.local)
 - Environment variables specified in [`./init.sh`](./init.sh)
+    - Each cluster is assigned a unique _prefix_ and _number_ that identify and set:
+        - hostnames
+        - databases
+        - local persisted directories (/data/...)
+    - Override the [init.sh](./init.sh) settings for new cluster.
+
+# Dependency
+This tutorial by example uses my custom built images for docker, source found [here](https://github.com/dstreev/docker-hortonworks).  Images are designed to build out a combination of an "Ambari-Server", "Ambari-Agent" and/or "Nifi Instance".
+
+Controlling which one of these is build when the container is started is controlled by the _environment variables_:
+- `AMBARI_SERVER`
+- `AMBARI_AGENT`
+- `NIFI_SERVER`
+
+Version information is controlled by in the `init.sh` and can be overridden. This process has been setup to expect a _local repo_ at `http://repo.hdp.local`.  See the image source for this repo [here](https://github.com/dstreev/docker-hortonworks/tree/master/hdp-repo) and the instantiation of that repo in [infra-up.sh](./infra-up.sh)
+
+With the correct flags and versions set, the supervisord process in the images will download, install and configure each of the desired services.
+
+The Ambari Server should always be setup on the first host because all Ambari-Agent will be configured to manually register with that host on startup.
+
+# Setting up the First Cluster
+
+## Docker
+- Install Docker
+    - My Version:
+    ```
+    Server:
+     Version:      1.13.1
+     API version:  1.26 (minimum version 1.12)
+     Go version:   go1.7.5
+     Git commit:   092cba3
+     Built:        Wed Feb  8 06:38:28 2017
+     OS/Arch:      linux/amd64
+     Experimental: true
+    ```
+    - Configured Experimental Mode:
+        - Create a File /etc/docker/daemon.json
+        ```
+        {
+            "experimental": true
+        }
+        ```
+    - Configure Docker Sockets.  I use this to be able to connect and issue commands to a Docker host from a remote location.
+        - Create a File `/etc/systemd/system/docker.service.d/docker.conf` on each Docker Host with contents:
+        ```
+        [Service]
+        ExecStart=
+        ExecStart=/usr/bin/dockerd -D -H tcp://0.0.0.0:2375
+        ```
+        - The first `ExecStart=` command is necessary...
+        - The second tells the docker engine started by `systemctl` to startup with sockets listening on all interfaces on port 2375
+        - This requires communicating with docker requires the `-H <host:port>` option for all commands, even locally: IE: `docker -H localhost:2375 ps`
+
+## Docker Swarm
+- Initialize the [Docker Swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/) so the nodes are all participating
+    - Pick a Swarm Manager and initialize the Swarm: `docker -H <manager_host:port> swarm init --advertise-addr <MANAGER-IP>`
+    - Validate Swarm Mode: `docker -H <manager_host:port> info`
+    ```
+    ...
+    Swarm: active
+     NodeID: 1bh9a6mgjzv73tbim22cmfuny
+     Is Manager: true
+     ClusterID: ihr97kxhekk941xm1rpp2qob2
+     Managers: 1
+     Nodes: 7
+    ...
+    ```
+    - Check the Nodes: `docker -H <manager_host:port> node ls`
+    ```
+    ID                           HOSTNAME         STATUS  AVAILABILITY  MANAGER STATUS
+    1bh9a6mgjzv73tbim22cmfuny *  d7.docker.local  Ready   Active        Leader
+
+    ```
+- Add Nodes to the Swarm
+    - Get the Join Command from the Swarm Manager
+    ```
+    > docker -H <manager_host:port> swarm join-token worker
+
+    To add a worker to this swarm, run the following command:
+    
+        docker swarm join \
+        --token SWMTKN-1-3nzgki6if3wyx7e1ptlhnj8bald6aqwq10pmk4is0n158yzp2c-0m8c0i7zo3w5luc8qp2pyznu8 \
+        10.0.1.17:2377
+
+    ```
+    - Run the above command on each host (don't forget the `-H` option)
+    - Validate Hosts have joined the Swarm `docker -H <manager_host:port> node ls`
+    ```
+    ID                           HOSTNAME         STATUS  AVAILABILITY  MANAGER STATUS
+    1bh9a6mgjzv73tbim22cmfuny *  d7.docker.local  Ready   Active        Leader
+    5tj4qajz3vj0ujnwja23qg49b    d6.docker.local  Ready   Active
+    bzu7ej07w6tu2o6ny17kwyn59    d2.docker.local  Ready   Active
+    cjsmqaj38r4pcvwac1jekm241    d5.docker.local  Ready   Active
+    i31e1z7j8zwjzra2t53iayu1u    d1.docker.local  Ready   Active
+    kc9w6cgr124p6fj1coy4apnaw    d3.docker.local  Ready   Active
+    wwq0i59fjx1nxukhbmlofbcgz    d4.docker.local  Ready   Active
+    ```
+
+- Create the Cluster Network on the Swarm Cluster
+    `docker -H <manager_host:port> network create --driver=overlay --subnet 10.0.10.0/24 --attachable core`
+    - The `core` network is used by all the other scripts in this tutorial.
+
+## Drive Mounts
+The images used in this tutorial have a few mount points that will allow us to persist cluster data separately from the containers.  Which is important if you want to be able to reset you clusters without loosing a lot of your data.
+
+Create a base directory on each docker host to store 'off container' data, `/var/local/hdp/`.  Settings in `init.sh` specific a cluster prefix `CLUSTER_PREFIX` and `AMBARI_INSTANCE`.  These values are translated down into the containers to establish unique drive locations so I can support multiple clusters.
+
+## Cluster Databases
+With the 'mysql' database running from the `infra-up.sh` the databases should have been created for:
+- Ambari
+- Hive
+- Oozie
+- Ranger
+- KMS
+- Druid
+
+Open Issue: [Init DB Scripts Not Working](https://github.com/dstreev/docker-hortonworks/issues/1)
+
+Base on the `AMBARI_INSTANCE` environment variable used, databases for each of these components are created.  Based on the scripts, I have defaulted all user passwords to `hortonworks`.
+
+### Databases
+Assumes `AMBARI_INSTANCE=01`
+
+| Database | User |
+|---|
+| ambari_01 | ambari |
+| hive_01 | hive |
+| oozie_01 | oozie |
+| ranger_01 | ranger |
+| ranger_kms_01 | ranger_kms |
+| druid_01 | druid |
+| superset_01 | superset |
+
+## Initialize HDP Cluster
+Run [up.sh](./up.sh) with default parameters.  Based on the tables above, with 7 docker hosts, it will initialize your base HDP cluster with the specified Ambari Version.
+
+Run [ps.sh](./ps.sh) to understand all the dynamic port mappings.  Review the ssh port mapping for the Ambari-Server (on d6 in this example).  Create an SSH tunnel to support a dynamic SOCKS proxy to this host.  Configure your browser to use the SOCKS5 proxy and then launch your Ambari UI from `http://dk01agent01.hdp.local`, assuming you have used all the same settings I have ;).
+
+Now you can build out you cluster with Ambari using the `local repo` you setup before.  The local repo will save you time and internet bandwidth when deploying all the HDP binaries.
 
 
-   ---
 
-HDP Cluster Deployment via Docker
-
-With this dep
-
-# Steps
-
-1. Build Centos7:sshd
-2. Build HDP Base
-3. Set environment variable for DATA_GROUP and LAUNCH_DATE
-```
-export DATA_GROUP=dk_01
-export LAUNCH_DATE=\`date +%Y-%m-%d_%H_%M\`
-
-```
-3. Run docker-compose build
-```
-docker-compose build
-```
-4. Run docker-compose up -d
-```
-docker-compose up -d
-```
-
-## Initializing Ambari Server
-
-1. Create User on MySql DB for Ambari Server.
-2. Run the Ambari Server Create Scripts.
-3. Launch Ambari-Server Setup.
-
------
-
-Separate out the Repo and MySql from the stack launch.
-
-Add Label to d1.docker.local to get repo onto that server.
-
-## Issued from the Manager Node:
-`docker node update --label-add constraint=repo d1.docker.local`
-
-## Copy repo data to d1 /data/www
-
-## Launch Repo Service
-`docker service create --hostname repo.hdp.local --network core --name hdp-repo --mount source=/data/www,target=/www,type=bind --mode replicated --replicas 1 --constraint 'node.labels.constraint == repo' --publish 80 dstreev/hdp-repo`
-
-## If Container doesn't start, look at the nodes daemon logs.
-For Centos7
-`journalctl -u docker`
-
-## Create Label for MySql
-`docker node update --label-add constraint=mysql d1.docker.local`
-
-## Create /data/mysql/data directory on d1.
-#            - "${ROOT_HDP_DATA_MOUNT}/${DATA_GROUP}/mysql/datadir:/var/lib/mysql"
-#            - "${ROOT_HDP_DATA_MOUNT}/mysql/init_ambari_${AMBARI_VERSION}:/docker-entrypoint-initdb.d"
-`docker service create --hostname db.hdp.local --network core --name hdp-mysql --mount source=/data/mysql/data,target=/var/lib/mysql,type=bind --mode replicated --replicas 1 --constraint 'node.labels.constraint == mysql' --env MYSQL_ROOT_PASSWORD=hortonworks --publish 3306 mysql:5.7`
-
-##

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export MYSQL_ROOT_PASSWORD=hortonworks
+
 export DOCKER_OPTS="-H d7:2375"
 
 export CLUSTER_PREFIX=${1:-dk}
