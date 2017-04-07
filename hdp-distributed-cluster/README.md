@@ -14,15 +14,19 @@ Docker networking was the biggest hurdle.  Because I needed to span multiple Doc
 
 I used [Docker Swarm](https://docs.docker.com/engine/swarm/) to build a cross host Docker cluster that shared configurations and networks.  The typical deployment process for Swarm is to build a [Docker Compose Definition](https://docs.docker.com/compose/) to provision my nodes.
 
+Although, the overlay network on a Docker Swarm cluster has an odd behavior that we need to work around.  For most of the components in the cluster the `-h` and `--network-alias` options were enough.  But for HBase, the reverse dns lookup would append the 'network' name on to the short hostname.  For example: Hostname -f is dk01agent01.hdp.local with the network we attached to is 'core'.  A simple ping of another host: `ping -c 1 dk01agent03.hdp.local` would show a hostname of `dk01agent03.core`.  This lead to some odd behavior in HBase.  At the time of this writing, it's still a work in progress.
+
+I think the best solution is to align the hostnames with the projected dns entry in Docker.  So if the network is `core` and the host shortname is `dk01agent02`, then I would make the fqdn of the host `dk01agent02.core` using the `-h` and `--network-alias` options.
+
 ### Docker Swarm and Docker Compose for Cluster Provisioning
 
-Let me mention this right away, this process looked hopeful but eventually didn't work for my needs.  I've kept the [compose file](./docker-compose.yml) in the project as a reference.
+Let me mention this right away, this process looked hopeful but eventually didn't work for my needs.
 
-At one point I used Docker Node Labels `docker node update --label-add constraint=repo d1.docker.local` on the Swarm cluster to try and control the placement of each _service_.  But I discovered through experience the I wasn't interested in a _service_, instead I need a _host_ that unique, persisted and restartable.  _Services_ are not that.
+At one point I used Docker Node Labels `docker node update --label-add constraint=repo d1.docker.local` on the Swarm cluster to try and control the placement of each _service_.  But I discovered through experience that I wasn't interested in a _service_, instead I need a _host_ that was unique, persisted and restartable.  _Services_ are not that.
 
 
 #### Issues
-* Each container in this setup is treated like a micro-service.
+* Each container deployed to the swarm cluster by `stack` through a 'compose' file was treated like a micro-service.
 * State between restarts was impossible.  This included hostname information, physical location of the container
 * Managing containers own view of it's hostname was NOT possible.  So, through experimentation, I actually used an "ambari-agent" host script to project a consistent name to Ambari-Server.  This worked fine UNTIL I tried to start HDFS.  Reverse DNS lookup of a host to itself isn't supported.
 
@@ -96,6 +100,7 @@ The Ambari Server should always be setup on the first host because all Ambari-Ag
 # Setting up the First Cluster
 
 ## Docker
+- Stop and Disable `firewalld`
 - Install Docker
     - My Version:
     ```
