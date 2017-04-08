@@ -29,10 +29,14 @@ docker -H d1:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
 export AGENT=7
 docker -H d2:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
 
-# Ambari Host
-echo "Ambari Host"
-docker -H d6:2375 ps
-# Nifi Host
-echo "Nifi Host"
-docker -H d2:2375 ps
+export AGENT=8
+docker -H d8:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+
+export AGENT=9
+docker -H d9:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+
+export AGENT=10
+docker -H d10:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
+
+. ./ps.sh
 
