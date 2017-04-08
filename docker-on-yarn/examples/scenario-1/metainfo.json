@@ -1,34 +1,18 @@
 {
-  "metainfo": {
-    "schemaVersion": "1.0",
-    "exportGroups": {
-      "exportGroup": {
-        "name": "Servers",
-        "exports": [
-          {
-            "export": {
-              "name": "memcached_servers",
-              "value": "${MEMCACHED_HOST}:${site.global.listen_port}"
-            }
-          }
-        ]
-      }
-    },
-    "application": {
-      "name": "MEMCACHED",
-      "components": {
-        "component": {
-          "name": "MEMCACHED",
-          "compExports": "memcached_servers",
-          "type": "docker",
-          "containers": {
-            "container": {
-              "name": "memcached",
-              "image": "borja/memcached"
-            }
+  "schemaVersion": "2.1",
+  "application": {
+    "name": "MEMCACHED",
+    "components": [
+      {
+        "name": "MEMCACHED",
+        "type": "docker",
+        "containers": {
+          "container": {
+            "name": "memcached",
+            "image": "borja/memcached"
           }
         }
       }
-    }
+    ]
   }
 }

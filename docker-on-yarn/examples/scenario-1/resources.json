@@ -6,7 +6,7 @@
   },
   "components": {
     "slider-appmaster": {},
-    "M EMCACHED ": {
+    "MEMCACHED ": {
       "yarn.role.priority": "1",
       "yarn.component.instances": "2",
       "yarn.memory": "512"
