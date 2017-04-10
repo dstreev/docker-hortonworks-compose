@@ -5,11 +5,14 @@
   "global": {
   },
   "components": {
-    "slider-appmaster": {},
-    "MEMCACHED ": {
-      "yarn.role.priority": "1",
-      "yarn.component.instances": "2",
-      "yarn.memory": "512"
+    "NODEJS": {
+      "nodejs.commandPath": "/usr/bin/docker",
+      "nodejs.options": "-d -e REDIS_HOST=${REDIS_HOST} --net=host",
+      "nodejs.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true"
+    },
+    "REDIS": {
+      "redis.options": "-d -e REDIS_PASS=**None**",
+      "redis.statusCommand": "docker top ${CONTAINER_ID} | grep redis-server"
     }
   }
 }

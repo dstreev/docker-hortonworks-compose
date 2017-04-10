@@ -1,17 +1,40 @@
 {
   "schemaVersion": "2.1",
   "application": {
-    "name": "MEMCACHED",
+    "name": "NODEJS-REDIS",
     "components": [
       {
-        "name": "MEMCACHED",
+        "name": "NODEJS",
         "type": "docker",
-        "containers": {
-          "container": {
-            "name": "memcached",
-            "image": "borja/memcached"
+        "dockerContainers": [
+          {
+            "name": "nodejs",
+            "commandPath": "/usr/bin/docker",
+            "image": "rsahahw/centos-node-redis",
+            "ports": [
+              {
+                "containerPort": "8000"
+              }
+            ]
           }
-        }
+        ]
+      },
+      {
+        "name": "REDIS",
+        "type": "docker",
+        "dockerContainers": [
+          {
+            "name": "redis",
+            "commandPath": "/usr/bin/docker",
+            "image": "tutum/redis",
+            "ports": [
+              {
+                "containerPort": "6379",
+                "hostPort": "6379"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
