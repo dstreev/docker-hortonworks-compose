@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "2.1",
+  "application": {
+    "name": "NGINX",
+    "components": [
+      {
+        "name": "NGINX",
+        "type": "docker",
+        "dockerContainers": [
+          {
+            "name": "nginx",
+            "commandPath": "/usr/bin/docker",
+            "image": "nginx",
+            "ports": [
+              {
+                "containerPort": "8080",
+                "hostPort": "9080"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

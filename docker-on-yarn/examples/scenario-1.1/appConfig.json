@@ -1,0 +1,14 @@
+{
+  "schema": "http://example.org/specification/v2.0.0",
+  "metadata": {
+  },
+  "global": {
+  },
+  "components": {
+    "NGINX": {
+      "nodejs.commandPath": "/usr/bin/docker",
+      "nodejs.options": "-d -e NGINX_HOST=${NGINX_HOST} --net=host",
+      "nodejs.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true"
+    }
+  }
+}
