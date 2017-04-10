@@ -6,7 +6,7 @@
   },
   "components": {
     "NODEJS": {
-      "nodejs.commandPath": "/user/local/bin/docker",
+      "nodejs.commandPath": "/usr/bin/docker",
       "nodejs.options": "-d -e REDIS_HOST=${REDIS_HOST} --net=host",
       "nodejs.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true"
     },
