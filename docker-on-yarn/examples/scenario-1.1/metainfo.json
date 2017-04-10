@@ -13,8 +13,8 @@
             "image": "nginx",
             "ports": [
               {
-                "containerPort": "8080",
-                "hostPort": "9080"
+                "containerPort": "80",
+                "hostPort": "9090"
               }
             ]
           }
