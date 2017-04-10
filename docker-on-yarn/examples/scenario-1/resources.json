@@ -1,18 +1,18 @@
 {
   "schema": "http://example.org/specification/v2.0.0",
-  "metadata": {
-  },
-  "global": {
-  },
+  "metadata": {},
+  "global": {},
   "components": {
-    "NODEJS": {
-      "nodejs.commandPath": "/usr/bin/docker",
-      "nodejs.options": "-d -e REDIS_HOST=${REDIS_HOST} --net=host",
-      "nodejs.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true"
-    },
+    "slider-appmaster": {},
     "REDIS": {
-      "redis.options": "-d -e REDIS_PASS=**None**",
-      "redis.statusCommand": "docker top ${CONTAINER_ID} | grep redis-server"
+      "yarn.role.priority": "1",
+      "yarn.component.instances": "1",
+      "yarn.memory": "512"
+    },
+    "NODEJS": {
+      "yarn.role.priority": "2",
+      "yarn.component.instances": "1",
+      "yarn.memory": "512"
     }
   }
 }
