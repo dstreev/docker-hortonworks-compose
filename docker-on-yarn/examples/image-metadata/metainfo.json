@@ -10,7 +10,8 @@
           {
             "name": "metadata",
             "commandPath": "/usr/bin/docker",
-            "image": "dstreev/image-metadata"
+            "image": "dstreev/image-metadata",
+            "additionalParam": "--privileged -e SERVER=${IMAGE_METADATA_HOST} --net=host"
           }
         ]
       }
