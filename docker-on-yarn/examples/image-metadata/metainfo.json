@@ -10,13 +10,7 @@
           {
             "name": "metadata",
             "commandPath": "/usr/bin/docker",
-            "image": "dstreev/image-metadata",
-            "mounts": [
-              {
-                "hostMount": "/hdfs",
-                "containerMount": "/hdfs"
-              }
-            ]
+            "image": "dstreev/image-metadata"
           }
         ]
       }

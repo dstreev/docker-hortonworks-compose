@@ -7,7 +7,7 @@
   "components": {
     "IMAGE_METADATA": {
       "image_metadata.commandPath": "/usr/bin/docker",
-      "image_metadata.options": "-d -e IMAGE_METADATA_HOST=${IMAGE_METADATA_HOST} --net=host",
+      "image_metadata.options": "-d --privileged -e SERVER=${IMAGE_METADATA_HOST} --net=host",
       "image_metadata.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true"
     }
   }
