@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "2.1",
+  "application": {
+    "name": "IMAGE_METADATA",
+    "components": [
+      {
+        "name": "IMAGE_METADATA",
+        "type": "docker",
+        "dockerContainers": [
+          {
+            "name": "metadata",
+            "commandPath": "/usr/bin/docker",
+            "image": "dstreev/image_metadata",
+            "mounts": [
+              {
+                "hostMount": "/hdfs",
+                "containerMount": "/hdfs"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
