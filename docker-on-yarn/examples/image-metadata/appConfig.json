@@ -8,9 +8,7 @@
     "IMAGE_METADATA": {
       "image_metadata.commandPath": "/usr/bin/docker",
       "image_metadata.options": "-d",
-      "image_metadata.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true",
-      "image_metadata.runPrivilegedContainer": "true",
-      "runPrivilegedContainer": "true"
+      "image_metadata.statusCommand": "docker inspect -f {{.State.Running}} ${CONTAINER_ID} | grep true"
     }
   }
 }

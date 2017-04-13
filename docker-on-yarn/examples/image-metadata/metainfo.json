@@ -12,20 +12,14 @@
             "commandPath": "/usr/bin/docker",
             "image": "dstreev/image-metadata",
             "runPrivilegedContainer": "true",
+            "additionalParams":"-v /hdfs:/hdfs --privileged",
             "network": "host",
             "ports": [
               {
                 "containerPort": "22",
                 "hostPort": "22022"
               }
-            ],
-            "mounts": [
-              {
-                "containerMount": "/hdfs",
-                "hostMount": "/hdfs"
-              }
             ]
-
           }
         ]
       }
