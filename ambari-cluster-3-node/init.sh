@@ -5,8 +5,8 @@ export MYSQL_ROOT_PASSWORD=hortonworks
 export DOCKER_OPTS="-H d7:2375"
 
 export CLUSTER_PREFIX=${1:-dk}
-export AMBARI_INSTANCE=${2:-02}
-export AMBARI_VERSION=${3:-2.5.0.3}
+export AMBARI_INSTANCE=${2:-10}
+export AMBARI_VERSION=${3:-2.4.2.0}
 export HDF_VERSION=${4:-2.1.2.0-10}
 export NIFI_VERSION=${5:-1.1.0}
 export REPO_BASE_URL=${6:-http://repo.hdp.local/repo}

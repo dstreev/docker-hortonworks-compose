@@ -7,7 +7,7 @@
 
 echo "Clean up: "
 #pdsh -g dk rm -rf /var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data
-pdsh -g dks mkdir -p /var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data
+pdsh -g os -l root mkdir -p /var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data
 
 
 
@@ -16,34 +16,34 @@ pdsh -g dks mkdir -p /var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data
 
 # Deploy on Swarm, but as individual containers
 # Ambari Server
-export AGENT=1
-docker -H d6:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_SERVER=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=01
+docker -H os1:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_SERVER=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
-export AGENT=2
-docker -H d7:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=02
+docker -H os2:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
-export AGENT=3
-docker -H d3:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "NIFI_VERSION=${NIFI_VERSION}" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=03
+docker -H os3:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "NIFI_VERSION=${NIFI_VERSION}" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
-export AGENT=4
-docker -H d4:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=04
+docker -H os4:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
-export AGENT=5
-docker -H d5:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=05
+docker -H os5:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
-export AGENT=6
-docker -H d1:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=06
+docker -H os6:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
-export AGENT=7
-docker -H d2:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "NIFI_SERVER=true" -e "NIFI_VERSION=${NIFI_VERSION}" -e "HDF_VERSION=${HDF_VERSION}" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
-
-export AGENT=8
-docker -H d8:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
-
-export AGENT=9
-docker -H d9:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=0${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+export AGENT=07
+docker -H os7:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --network-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "NIFI_SERVER=true" -e "NIFI_VERSION=${NIFI_VERSION}" -e "HDF_VERSION=${HDF_VERSION}" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
 export AGENT=10
-docker -H d10:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+docker -H os10:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+
+export AGENT=11
+docker -H os11:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
+
+export AGENT=12
+docker -H os12:2375 run -h ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core --privileged --net-alias ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}.core -P --name ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT} -d --network core --dns-search=core --restart=unless-stopped -e "AMBARI_VERSION=${AMBARI_VERSION}" -e "CLUSTER_PREFIX=${CLUSTER_PREFIX}" -e "AMBARI_INSTANCE=${AMBARI_INSTANCE}" -e "AMBARI_AGENT=true" -e "AGENT=${AGENT}" -e "REPO_BASE_URL=${REPO_BASE_URL}" -v "/var/local/hdp/${CLUSTER_PREFIX}${AMBARI_INSTANCE}/data:/data" dstreev/centos7_ambari:2
 
 . ./ps.sh

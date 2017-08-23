@@ -7,36 +7,35 @@ docker ${DOCKER_OPTS} network create --driver=overlay --subnet 10.0.10.0/24 --at
 
 # Deploy on Swarm, but as individual containers
 # Ambari Server
-export AGENT=1
-docker -H d6:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=01
+docker -H os1:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
-export AGENT=2
-docker -H d7:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=02
+docker -H os2:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
-# Nifi
-export AGENT=3
-docker -H d3:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=03
+docker -H os3:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
-export AGENT=4
-docker -H d4:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=04
+docker -H os4:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
-export AGENT=5
-docker -H d5:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=05
+docker -H os5:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
-export AGENT=6
-docker -H d1:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=06
+docker -H os6:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
-export AGENT=7
-docker -H d2:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
-
-export AGENT=8
-docker -H d8:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
-
-export AGENT=9
-docker -H d9:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent0${AGENT}
+export AGENT=07
+docker -H os7:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
 export AGENT=10
-docker -H d10:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
+docker -H os10:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
+
+export AGENT=11
+docker -H os11:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
+
+export AGENT=12
+docker -H os12:2375 start ${CLUSTER_PREFIX}${AMBARI_INSTANCE}agent${AGENT}
 
 . ./ps.sh
 

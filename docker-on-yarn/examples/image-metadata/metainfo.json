@@ -19,6 +19,12 @@
                 "containerPort": "22",
                 "hostPort": "22022"
               }
+            ],
+            "mounts": [
+              {
+                "containerMount": "/hdfs",
+                "hostMount": "/hdfs"
+              }
             ]
           }
         ]
